@@ -1,0 +1,23 @@
+#include <string>
+#include <cmath>
+#include <vector>
+
+using namespace std;
+
+int solution(int n) {
+    int answer = 0;
+    int r = sqrt(n);
+    
+    for (int i = 1; i <= r; i++){
+        if (!(n % i)){
+            int j = n / i;
+            
+            answer += i + j;
+            
+            if (i == j)
+                answer -= j;
+        }
+    }
+    
+    return answer;
+}
