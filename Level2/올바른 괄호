@@ -1,0 +1,39 @@
+#include <string>
+#include <iostream>
+#include <stack>
+
+using namespace std;
+
+bool solution(string s)
+{
+    bool answer = true;
+    
+    stack <string> stk;
+    
+    for (int i = 0; i < s.size(); i++) {
+        if (s[i] == '(') {
+            stk.push("(");
+        }
+        
+        else if (s[i] == ')') {
+            // 스택이 비어있으면, answer = false로 만든 후 break
+            if (stk.empty()) {
+                answer = false;
+                break;
+            }
+            
+            // 스택이 비어있지 않으면, ( 한 개 빼기
+            stk.pop();
+        }
+    }
+
+    // string s를 모두 조사했는데, 스택이 남아있다는 것은 (가 여전히 남아있다는 말
+    if (!stk.empty()) {
+        answer = false;
+    }
+    
+    // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
+    cout << answer << endl;
+
+    return answer;
+}
