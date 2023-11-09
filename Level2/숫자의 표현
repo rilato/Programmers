@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int n) {
+    int answer = 0;
+    int start = 1;
+    int end = 1;
+        
+    while (start <= n) {
+        int sum = 0;
+
+        for (int i = start; i <= end; i++) {
+            sum += i;
+        }
+
+        if (sum == n) {
+            end++;  // 합을 늘이기 위해 숫자를 키운다.
+            answer++;
+        }
+        else if (sum < n) {
+            end++;  // sum이 작으므로, 합을 늘이기 위해 end를 키운다.
+        }
+        else {
+            start++;    // sum이 크므로, 합을 줄이기 위해 start를 키운다.
+        }
+    }
+    
+    return answer;
+}
