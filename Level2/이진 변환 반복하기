@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+vector<int> solution(string s) {
+    int change = 0; // 이진 변환 개수
+    int cnt = 0;    // 제거된 0의 개수
+    vector<int> answer;
+    
+    while (1) {
+        string temp = "";
+        
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] == '0') {
+                cnt++;
+                continue;
+            }
+            
+            temp += s[i];
+        }
+        
+        int len = temp.size();
+        
+        string binar = "";
+        
+        while (len) {
+            binar += to_string(len % 2);
+            len /= 2;
+        }
+        
+        reverse(binar.begin(), binar.end());
+        s = binar;
+        
+        change++;
+        
+        if (s == "1") {
+            answer.push_back(change);
+            answer.push_back(cnt);
+            break;
+        }
+    }
+    
+    return answer;
+}
