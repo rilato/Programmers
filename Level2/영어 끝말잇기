@@ -1,0 +1,55 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <set>
+
+using namespace std;
+
+vector<int> solution(int n, vector<string> words) {
+    string temp;
+    vector<int> answer;
+    set<string> s;
+    
+    // 맨 처음 단어 set에 넣기
+    s.insert(words[0]);
+    
+    for (int i = 1; i < words.size(); i++) {
+        temp = words[i - 1];
+        
+        // 끝말잇기의 여부를 판단하기
+        if (temp[temp.size() - 1] == words[i][0]) {
+            // 단어가 이미 set에 있다면 중복 단어
+            if (s.find(words[i]) != s.end()) {
+                // 탈락자의 번호 : cnt % 사람 수 + 1
+                answer.push_back(i % n + 1);
+
+                // 몇 번째 차례 : i / 사람 수 + 1
+                answer.push_back(i / n + 1);
+
+                break;
+            }
+            // 단어가 없다면 set에 넣기
+            else {
+                s.insert(words[i]);
+                
+                if (i == words.size() - 1) {
+                    answer.push_back(0);
+                    answer.push_back(0);
+                }
+            }
+        }
+        
+        // 끝말잇기가 안된다면 계산 후 끝내기
+        else {
+            // 탈락자의 번호 : cnt % 사람 수 + 1
+            answer.push_back(i % n + 1);
+
+            // 몇 번째 차례 : i / 사람 수 + 1
+            answer.push_back(i / n + 1);
+
+            break;
+        }
+    }
+
+    return answer;
+}
