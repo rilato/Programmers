@@ -1,0 +1,40 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int solution(vector<int> people, int limit) {
+    sort(people.begin(), people.end());
+    
+    int count = 0;
+    int startIdx = 0;
+    int gap = limit - people[startIdx];
+    int midIdx;
+    
+    for (int i = people.size() - 1; i >= 0; i--) {
+        if (people[i] <= gap) {
+            midIdx = i;
+            break;
+        }
+        // gap을 만족하지 않는다면, 이 사람은 혼자 보트에 태워야 한다.
+        else {
+            count++;
+        }
+    }
+    
+    while (startIdx <= midIdx) {
+        if (people[startIdx] + people[midIdx] <= limit) {
+            startIdx++;
+            midIdx--;
+            count++;
+        }
+        // 짝이 안맞는 사람은 혼자 보트를 태운다.
+        else {
+            midIdx--;
+            count++;
+        }
+    }
+    
+    return count;
+}
