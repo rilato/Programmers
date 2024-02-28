@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int GCD(int a, int b);
+
+// arr_len은 배열 arr의 길이입니다.
+int solution(int arr[], size_t arr_len) {
+    int lcm = arr[0];
+    
+    for (int i = 1; i < arr_len; i++) {
+        int gcd = GCD(lcm, arr[i]);
+        lcm = lcm * arr[i] / gcd;
+    }
+    
+    return lcm;
+}
+
+int GCD(int a, int b) {
+    while (b) {
+        int c = a % b;
+        a = b;
+        b = c;
+    }
+    
+    return a;
+}
