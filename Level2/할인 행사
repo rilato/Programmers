@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+int solution(vector<string> want, vector<int> number, vector<string> discount) {
+    int cnt = 0;
+    map <string, int> m;
+    
+    // map m에 물품(want)에 맞는 개수(number) 옮기기
+    for (int i = 0; i < want.size(); i++) {
+        m[want[i]] = number[i];
+    }
+    
+    for (int i = 0; i <= discount.size() - 10; i++) {
+        bool flag = true;
+        map <string, int> tempM = m;
+        
+        for (int j = i; j < i + 10; j++) {
+            // 원하는 물품을 찾은 경우
+            if (tempM.find(discount[j]) != tempM.end()) {
+                tempM[discount[j]]--;
+            }
+            // 원하는 물품을 찾지 못한 경우
+            else {
+                flag = false;
+                break;
+            }
+            if (tempM[discount[j]] < 0) {
+                flag = false;
+                break;
+            }
+        }
+        
+        if (flag) {
+            cnt++;
+        }
+    }
+    
+    return cnt;
+}
