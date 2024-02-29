@@ -1,0 +1,37 @@
+#include <string>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+int solution(string s) {
+    int cnt = 0;
+    
+    for (int i = 0; i < s.size(); i++) {
+        stack <int> st;
+        
+        st.push(s[0]);
+        
+        // st이 비지 않아야 st.top()연산이 가능하다
+        for (int j = 1; j < s.size(); j++) {
+            if (!st.empty() && (st.top() == '[' && s[j] == ']' || st.top() == '{' && s[j] == '}' || st.top() == '(' && s[j] == ')')) {
+                st.pop();
+            }
+            else {
+                st.push(s[j]);
+            }
+        }
+        
+        // 완벽한 괄호가 된 경우이므로, cnt++
+        if (st.empty()) {
+            cnt++;
+        }
+        
+        // s 한 칸 이동
+        s += s[0];
+        // erase는 begin() + i형식으로 지운다
+        s.erase(s.begin());
+    }
+    
+    return cnt;
+}
