@@ -1,0 +1,85 @@
+// 효율적인 풀이
+
+#include <string>
+#include <vector>
+#include <set>
+
+using namespace std;
+
+int solution(vector<int> elements) {
+    set<int> S;
+
+    int n = elements.size();
+
+    for (int i = 0 ; i < n ; ++i) {
+        int sum = 0;
+        for (int j = i ; j < i + n ; ++j) {
+            sum += elements[j % n];
+            S.insert(sum);
+        }
+    }
+
+    return S.size();
+}
+
+// 나의 풀이
+
+#include <iostream>
+#include <string>
+#include <queue>
+#include <set>
+
+using namespace std;
+
+int solution(vector<int> elements) {
+    deque <int> dq;
+    set <int> s;
+
+    for (int i = 0; i < elements.size(); i++) {
+        dq.push_back(elements[i]);
+    }
+
+    // i는 합치는 숫자의 길이 (합치는 숫자의 개수)
+    for (int i = 1; i <= elements.size(); i++) {
+        // 모든 원소 순회
+        for (int j = 0; j < dq.size(); j++) {
+            int sum = 0;
+
+            // 원소를 i 개수만큼 합한 후 set에 저장
+            for (int k = 0; k < i; k++) {
+                sum += dq.front();
+                dq.push_back(dq.front());
+                dq.pop_front();
+            }
+
+            if (sum != 0) {
+                //cout << '\n' << "sum : " << sum << '\n';
+                s.insert(sum);
+            }
+
+            //cout << "dq : ";
+            //for (int i = 0; i < dq.size(); i++) {
+            //    cout << dq.front() << " ";
+            //    dq.push_back(dq.front());
+            //    dq.pop_front();
+            //}
+            //cout << '\n';
+
+            // dq 복원 작업
+            for (int k = 0; k < i - 1; k++) {
+                dq.push_front(dq.back());
+                dq.pop_back();
+            }
+
+            //cout << "dq : ";
+            //for (int i = 0; i < dq.size(); i++) {
+            //    cout << dq.front() << " ";
+            //    dq.push_back(dq.front());
+            //    dq.pop_front();
+            //}
+            //cout << '\n';
+        }
+    }
+
+    return s.size();
+}
