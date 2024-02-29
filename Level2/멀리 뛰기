@@ -1,0 +1,28 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+long long solution(int n) {
+    vector <vector <int>> dp;
+    
+    // n + 1로 resize하면, 여러 테스트케이스가 solution함수를 거친다고 가정했을 때, 1일 때 통과를 못함
+    // 따라서 2001처럼 고정적인 사이즈를 넣어주어야 함.
+    dp.resize(2001, vector <int>(3));
+    
+    // dp[n][1] : dp[n 번째 칸][이번에 한 칸 뛰어 n번째 칸 완성]
+    // dp[n][2] : dp[n 번째 칸][이번에 두 칸 뛰어 n번째 칸 완성]
+    dp[0][1] = 0;
+    dp[0][2] = 0;
+    dp[1][1] = 1;
+    dp[1][2] = 0;
+    dp[2][1] = dp[1][1] + dp[1][2]; // dp[1]과 동일
+    dp[2][2] = 1;
+    
+    for (int i = 3; i <= n; i++) {
+        dp[i][1] = (dp[i - 1][1] + dp[i - 1][2]) % 1234567;
+        dp[i][2] = (dp[i - 2][1] + dp[i - 2][2]) % 1234567;
+    }
+    
+    return (dp[n][1] + dp[n][2]) % 1234567;
+}
