@@ -1,0 +1,32 @@
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+int solution(vector<vector<string>> clothes) {
+    int answer = 1;
+    map <string, int> m;
+    
+    for (int i = 0; i < clothes.size(); i++) {
+        string name = clothes[i][0];
+        string cloth = clothes[i][1];
+        
+        // 해당 옷 종류가 있으면 옷 종류 1개 추가
+        if (m.find(cloth) != m.end()) {
+            m[cloth]++;
+        }
+        // 해당 옷 종류가 없으면 기본 값 1개로 세팅
+        else {
+            m[cloth] = 1;
+        }
+    }
+    
+    // 옷을 안입는 경우를 고려해서 +1을 해야함
+    for (auto iter = m.begin(); iter != m.end(); iter++) {
+        answer *= (iter->second + 1);
+    }
+    
+    // 모두 안입는 경우는 배제해야하므로 -1을 해야함
+    return answer - 1;
+}
