@@ -6,14 +6,15 @@ using namespace std;
 // answer에 &를 붙여서, answer의 값에 직접 저장되도록 한다.
 // & 안붙이면 answer가 계속 0이 된다.
 void Backtracking(vector<vector<int>> dungeons, int k, vector<bool> visited, int& answer, int cnt) {
+    // Backtracking 함수 안에 들어올 때마다 answer를 계산하고, 갱신한다.
+    answer = max(answer, cnt);
+    
     for (int i = 0; i < dungeons.size(); i++) {
         if (!visited[i] && k >= dungeons[i][0]) {
             visited[i] = true;
             cnt++;
             k -= dungeons[i][1];
             Backtracking(dungeons, k, visited, answer, cnt);
-            // for문 위에서 return을 걸어주지 않고, 여기서 answer를 계산한다.
-            answer = max(answer, cnt);
             k += dungeons[i][1];
             cnt--;
             visited[i] = false;
