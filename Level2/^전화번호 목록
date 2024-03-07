@@ -1,0 +1,18 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool solution(vector<string> phone_book) {
+    // 문자열로 주어지기 때문에, 123 45 12가 주어진다면, 12 123 45 순으로 정렬됨
+    sort(phone_book.begin(), phone_book.end());
+    
+    for (int i = 0; i < phone_book.size() - 1; i++) {
+        if (phone_book[i] == phone_book[i + 1].substr(0, phone_book[i].size())) {
+            return false;
+        }
+    }
+    
+    return true;
+}
