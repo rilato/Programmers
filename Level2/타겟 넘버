@@ -1,0 +1,36 @@
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int solution(vector<int> numbers, int target) {
+    int answer = 0;
+    queue <pair <int, int>> q;
+    
+    // numbers의 값 (얘는 총 합으로 사용됨), 카운트 값을 푸시
+    q.push({ numbers[0], 0 });
+    // numbers의 반대 값 (얘는 총 합으로 사용됨), 카운트 값을 푸시
+    q.push({ -numbers[0], 0 });
+    
+    while(!q.empty()) {
+        int sum = q.front().first;
+        int cnt = q.front().second;
+        
+        q.pop();
+        
+        if (cnt == numbers.size() - 1 && sum == target) {
+            answer++;
+        }
+        
+        cnt++;
+        
+        // cnt == numbers.size()일 때, numbers[cnt]가 없는 값이라 오류 발생하므로, 조건 추가
+        if (cnt < numbers.size()) {
+            q.push({ sum + numbers[cnt], cnt });
+            q.push({ sum - numbers[cnt], cnt });
+        }
+    }
+    
+    return answer;
+}
