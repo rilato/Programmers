@@ -1,19 +1,20 @@
+// string으로 주어진 문자열은 int의 타입을 벗어날 수 있다. long long type을 사용하자.
+
 #include <string>
 #include <vector>
-#include <iostream>
 
 using namespace std;
 
 int solution(string t, string p) {
     int answer = 0;
     int len = p.size();
-    int number = stoi(p);
-    
+    long long number = stoll(p);
+
     // substr(i, len)에서, i ~ len - 1까지 조사하므로, for문에서 t.size() - len까지 조사해야 한다.
     for (int i = 0; i <= t.size() - len; i++) {
-        cout << stoi(t.substr(i, len)) << '\n';
+        string s = t.substr(i, len);
         
-        if (stoi(t.substr(i, len)) <= number) {
+        if (stoll(s) <= number) {
             answer++;
         }
     }
