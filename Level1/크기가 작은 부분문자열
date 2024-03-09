@@ -1,0 +1,22 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(string t, string p) {
+    int answer = 0;
+    int len = p.size();
+    int number = stoi(p);
+    
+    // substr(i, len)에서, i ~ len - 1까지 조사하므로, for문에서 t.size() - len까지 조사해야 한다.
+    for (int i = 0; i <= t.size() - len; i++) {
+        cout << stoi(t.substr(i, len)) << '\n';
+        
+        if (stoi(t.substr(i, len)) <= number) {
+            answer++;
+        }
+    }
+    
+    return answer;
+}
