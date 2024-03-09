@@ -1,0 +1,51 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string change(int n, int num) {
+    string str = "";
+    
+    while (num) {
+        str = to_string(num % 2) + str;
+        num /= 2;
+    }
+    
+    int size = str.size();
+    
+    // size가 n만큼 되도록 패딩 넣어주기
+    while (1) {
+        if (size == n) {
+            break;
+        }
+        
+        size++;
+        str = "0" + str;
+    }
+    
+    return str;
+}
+
+vector<string> solution(int n, vector<int> arr1, vector<int> arr2) {
+    vector<string> answer;
+    
+    for (int i = 0; i < n; i++) {
+        string s1 = change(n, arr1[i]);
+        string s2 = change(n, arr2[i]);
+        
+        string str = "";
+        
+        for (int j = 0; j < n; j++) {
+            if (s1[j] == '0' && s2[j] == '0') {
+                str += " ";
+            }
+            else {
+                str += "#";
+            }
+        }
+        
+        answer.push_back(str);
+    }
+    
+    return answer;
+}
