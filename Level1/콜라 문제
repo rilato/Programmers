@@ -1,0 +1,38 @@
+// a = 3, b = 5, n = 7
+// 맞은 코드에서는 answer = 5 * (7 / 3) = 10, n = 5 * (7 / 3) + 7 % 3 = 10 + 1 = 11
+// 틀린 코드에서는 answer = 7 * 5 / 3 = 11, n = 7 * 5 / 3 + 7 % 3 = 11 + 1 = 12
+
+// 맞은 코드
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int a, int b, int n) {
+    int answer = 0;
+    
+    while (n >= a) {
+        answer += (n / a) * b;
+        n = (n / a) * b + n % a;
+    }
+    
+    return answer;
+}
+
+// 틀린 코드
+
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int a, int b, int n) {
+    int answer = 0;
+    
+    while (n >= a) {
+        answer += n * b / a;
+        n = n * b / a + n % a;
+    }
+    
+    return answer;
+}
