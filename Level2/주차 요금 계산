@@ -1,0 +1,73 @@
+// set 컨테이너는, 값을 저장할 때 자동으로 오름차순으로 저장한다.
+
+#include <string>
+#include <vector>
+#include <set>
+#include <iostream>
+
+using namespace std;
+
+vector<int> solution(vector<int> fees, vector<string> records) {
+    vector<int> answer;
+    set <int> carNum;
+    vector <vector <int>> v; // v[차 번호][시간]
+    
+    v.resize(10000);
+    
+    for (int i = 0; i < records.size(); i++) {
+        // 시간 계산
+        int time = stoi(records[i].substr(0, 2)) * 60 + stoi(records[i].substr(3, 5));
+        int number = stoi(records[i].substr(6, 10));
+        
+        //cout << "number : " << number << ", time : " << time << '\n';
+        carNum.insert(number);
+        v[number].push_back(time);
+    }
+    
+    for (auto iter = carNum.begin(); iter != carNum.end(); iter++) {
+        int num = *iter;
+        int temp = v[num][0];   // 맨 처음 IN 시간
+        int time = 0;           // 총 주차 시간
+        int fee = 0;            // 총 주차 요금
+        
+        // cout << "num : " << num << ", temp : " << temp;
+        
+        // 한 개 들어있다면, 23시 59분까지 주차하는 것
+        if (v[num].size() == 1) {
+            time = 1439 - temp;
+        }
+        
+        for (int i = 1; i < v[num].size(); i++) {
+            // 나머지가 1이라면, OUT이라는 것
+            if (i % 2) {
+                time += v[num][i] - temp;
+                temp = 0;
+            }
+            // 나머지가 0이라면, IN이라는 것
+            else {
+                // 마지막 들어있는 값이 IN이라면, 23시 59분에서 빼줄 것
+                if (i == v[num].size() - 1) {
+                    time += 1439 - v[num][i];
+                }
+                else {
+                    temp = v[num][i];
+                }
+            }
+        }
+        
+        // cout << ", time : " << time << '\n';
+        
+        // 모두 더한 시간이 기본 시간보다 작거나 같으면, 기본 요금 계산
+        if (time <= fees[0]) {
+            fee += fees[1];
+        }
+        else {
+            // 올림 처리해야하므로, fees[2] - 1만큼을 더한다 (100 / 10 = 10이 되어야 함 -> 109 / 10 -> 10 & 101 / 10 = 11이 되어야 함 -> 110 / 10 = 11)
+            fee += fees[1] + ((time - fees[0] + fees[2] - 1) / fees[2]) * fees[3];
+        }
+        
+        answer.push_back(fee);
+    }
+    
+    return answer;
+}
