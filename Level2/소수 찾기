@@ -1,0 +1,60 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector <bool> isPrime(10000001);
+vector <bool> check(10000001);
+vector <char> temp;
+int answer = 0;
+
+void Backtracking(int depth, string numbers, int want, vector <bool> visited);
+
+int solution(string numbers) {
+    
+    isPrime[0] = true;
+    isPrime[1] = true;
+    
+    for (int i = 2; i <= 10000000; i++) {
+        if (!isPrime[i]) {
+            for (int j = i + i; j <= 10000000; j += i) {
+                isPrime[j] = true;
+            }
+        }
+    }
+    
+    for (int i = 1; i <= numbers.size(); i++) {
+        vector <bool> visited(numbers.size());
+        Backtracking(0, numbers, i, visited);
+    }
+    
+    return answer;
+}
+
+void Backtracking(int depth, string numbers, int want, vector <bool> visited) {
+    if (depth == want) {
+        string tmp = "";
+        
+        for (int i = 0; i < temp.size(); i++) {
+            tmp += temp[i];
+        }
+        
+        int num = stoi(tmp);
+        
+        if (!isPrime[num] && !check[num]) {
+            check[num] = true;
+            answer++;
+        }
+    }
+    
+    for (int i = 0; i < numbers.size(); i++) {
+        if (!visited[i]) {
+            visited[i] = true;
+            char c = numbers[i];
+            temp.push_back(c);
+            Backtracking(depth + 1, numbers, want, visited);
+            temp.pop_back();
+            visited[i] = false;
+        }
+    }
+}
