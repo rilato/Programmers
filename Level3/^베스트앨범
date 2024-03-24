@@ -1,0 +1,56 @@
+// cmp함수를 작성하는 방법,
+// map을 vector에 옮겨서 정렬하는 방법을 익힌다.
+
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+
+using namespace std;
+
+bool cmp(pair<string, int>& a, pair<string, int>& b);
+bool cmp2(pair <pair <string, int>, int>& a, pair <pair <string, int>, int>& b);
+
+vector<int> solution(vector<string> genres, vector<int> plays) {
+    vector<int> answer;
+    
+    map <string, int> m;        // 장르 별 총 플레이 횟수 저장
+    map <string, int> cnt;      // 장르 별 두 곡만 저장해야하므로, 그걸 위해 설정
+    vector <pair <pair <string, int>, int>> play;   // 장르별 플레이 수 저장
+    
+    for (int i = 0; i < plays.size(); i++) {
+        m[genres[i]] += plays[i];
+        cnt[genres[i]] = 2;
+        
+        play.push_back({ { genres[i], plays[i] }, i});
+    }
+    
+    // map을 정렬하기 위해 vector에 옮기기
+    vector<pair<string, int>> v(m.begin(), m.end());
+	  sort(v.begin(), v.end(), cmp);
+    sort(play.begin(), play.end(), cmp2);
+    
+    for (int i = 0; i < v.size(); i++) {
+        for (int j = 0; j < play.size(); j++) {
+            // 두 곡을 모두 저장했으므로 break;
+            if (cnt[v[i].first] == 0) {
+                break;
+            }
+            
+            if (v[i].first == play[j].first.first) {
+                cnt[v[i].first]--;
+                answer.push_back(play[j].second);
+            }
+        }
+    }
+    
+    return answer;
+}
+
+bool cmp(pair<string, int>& a, pair<string, int>& b) {
+    return a.second > b.second;
+}
+
+bool cmp2(pair <pair <string, int>, int>& a, pair <pair <string, int>, int>& b) {
+    return a.first.second > b.first.second;
+}
