@@ -1,0 +1,25 @@
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+int solution(vector<int> nums)
+{
+    int answer = 0;
+    
+    // 중복 제거를 위해 map 사용, 또한 일반 배열 사용하면 탐색 시간이 길어지므로 map 사용
+    unordered_map <int, int> m;
+    
+    for (int i = 0; i < nums.size(); i++) {
+        m[nums[i]]++;
+    }
+    
+    if (m.size() >= nums.size() / 2) {
+        answer = nums.size() / 2;
+    }
+    else {
+        answer = m.size();
+    }
+    
+    return answer;
+}
