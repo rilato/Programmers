@@ -6,22 +6,27 @@
 using namespace std;
 
 string solution(string s) {
+    string answer = "";
     int idx = 0;
     
-    for(int i=0; i<s.size(); i++){
-        if(s[i] == ' '){
-            idx=0;
-            continue; 
+    for (int i = 0; i < s.size(); i++) {
+        if (s[i] == ' ') {
+            idx = 0;
+            
+            answer += " ";
         }
-       
-        if(idx % 2){
-            s[i] = tolower(s[i]);
+        // 공백이 하나 이상 있을 수 있다.
+        else {
+            if (idx % 2 == 0) {
+                answer += toupper(s[i]);
+            }
+            else if (idx % 2 == 1) {
+                answer += tolower(s[i]);
+            }
+            
+            idx++;
         }
-        else{
-            s[i] = toupper(s[i]); 
-        }
-        idx++;
     }
-    
-    return s;
+        
+    return answer;
 }
