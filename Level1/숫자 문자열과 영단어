@@ -1,0 +1,64 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(string s) {
+    int answer = 0;
+    string ans = "";
+    string temp = "";
+    
+    for (int i = 0; i < s.size(); i++) {
+        if (0 <= s[i] - '0' && s[i] - '0' <= 9) {
+            ans += s[i];
+        }
+        else {
+            temp += s[i];
+            
+            if (temp == "zero") {
+                ans += "0";
+                temp = "";
+            }
+            if (temp == "one") {
+                ans += "1";
+                temp = "";
+            }
+            if (temp == "two") {
+                ans += "2";
+                temp = "";
+            }
+            if (temp == "three") {
+                ans += "3";
+                temp = "";
+            }
+            if (temp == "four") {
+                ans += "4";
+                temp = "";
+            }
+            if (temp == "five") {
+                ans += "5";
+                temp = "";
+            }
+            if (temp == "six") {
+                ans += "6";
+                temp = "";
+            }
+            if (temp == "seven") {
+                ans += "7";
+                temp = "";
+            }
+            if (temp == "eight") {
+                ans += "8";
+                temp = "";
+            }
+            if (temp == "nine") {
+                ans += "9";
+                temp = "";
+            }
+        }
+    }
+    
+    answer = stoi(ans);
+    
+    return answer;
+}
