@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(string s) {
+    int answer = 1001;
+    
+    // 문자를 자르는 크기
+    for (int i = 1; i <= s.size() / 2; i++) {
+        string str = "";
+        string tempStr = s.substr(0, i);
+        string temp = "";
+        int cnt = 1;    // 동일한 문자열이 몇 개 반복되었는지 카운트
+        
+        // 간격 i만큼 문자열 탐색
+        for (int j = i; j < s.size(); j += i) {
+            // j부터 i만큼 문자열을 잘랐는데, 이전 문자열과 같은 경우
+            if (tempStr == s.substr(j, i)) {
+                cnt++;
+            }
+            // j부터 i만큼 문자열을 잘랐는데, 이전 문자열과 다른 경우
+            else {
+                // cnt가 2이상이라면 문자 앞에 반복 횟수 붙여주기
+                if (cnt > 1) {
+                    str += to_string(cnt);
+                }
+                
+                // 남은 문자 붙여주기
+                str += tempStr;
+                // tempStr을 이번에 뽑은 문자열로 새롭게 바꿔주기
+                tempStr = s.substr(j, i);
+                // cnt 값 1로 복원하기
+                cnt = 1;
+            }
+        }
+        
+        // 간격만큼 다 돌리고, 문자열이 남는 경우 처리
+        if (cnt > 1) {
+            str += to_string(cnt);
+        }
+        
+        str += tempStr;
+        
+        int strSize = str.size();
+        
+        answer = min(answer, strSize);
+    }
+    
+    return answer;
+}
