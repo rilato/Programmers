@@ -5,7 +5,8 @@
 using namespace std;
 
 int solution(string s) {
-    int answer = 1001;
+    // 나올 수 있는 최대 길이로 초기화
+    int answer = s.size();
     
     // 문자를 자르는 크기
     for (int i = 1; i <= s.size() / 2; i++) {
