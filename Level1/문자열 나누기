@@ -1,0 +1,78 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(string s) {
+    int answer = 0;
+    bool flag = false;
+    char temp;
+    int tempCnt = 0;
+    int elseCnt = 0;
+    
+    //string tmp = "";
+    
+    for (int i = 0; i < s.size(); i++) {
+        if (flag && s[i] == temp) {
+            //cout << "1\n";
+            //cout << "temp : " << temp << '\n';
+            
+            tempCnt++;
+            
+            //cout << "tempCnt : " << tempCnt << '\n';
+            
+            if (i == s.size() - 1) {
+                answer++;
+            }
+            
+            //tmp += s[i];
+            
+            //cout << "tmp : " << tmp << '\n';
+        }
+        // 여기서 else if를 안하고, if를 걸어주면, 첫 번째 if문에 걸렸던 애가 맨 아래의 else문에 또 걸릴 수 있음.
+        else if (!flag) {
+            //cout << "2\n";
+            //cout << "temp : " << temp << '\n';
+            
+            temp = s[i];
+            tempCnt++;
+            flag = true;
+            
+            //cout << "tempCnt : " << tempCnt << '\n';
+            
+            if (i == s.size() - 1) {
+                answer++;
+            }
+            
+            //tmp += s[i];
+            
+            //cout << "tmp : " << tmp << '\n';
+        }
+        else {
+            //cout << "3\n";
+            //cout << "temp : " << temp << '\n';
+            
+            elseCnt++;
+            
+            //cout << "elseCnt : " << elseCnt << '\n';
+            
+            //tmp += s[i];
+            
+            //cout << "tmp : " << tmp << '\n';
+                
+            if (tempCnt == elseCnt || i == s.size() - 1) {
+                tempCnt = 0;
+                elseCnt = 0;
+                flag = false;
+                answer++;
+                
+                //cout << "answer : " << answer << '\n';
+                
+                //tmp = "";
+            }
+        }
+    }
+    
+    return answer;
+}
