@@ -1,25 +1,20 @@
-// 길이가 4와 6인 경우만 고려하도록 한다.
-
 #include <string>
 #include <vector>
 
 using namespace std;
 
 bool solution(string s) {
-    bool answer = true;
-
+    if (s.size() != 4 && s.size() != 6) {
+        return false;
+    }
     
-    if (s.size() == 4 || s.size() == 6){
-        for (int i = 0; i < s.size(); i++){
-            if (!('0' <= s[i] && s[i] <= '9')){
-                answer = false;
-                break;
-            }
+    for (int i = 0; i < s.size(); i++) {
+        if (0 <= s[i] - '0' && s[i] - '0' <= 9) {
+            continue;
         }
-    }
-    else{
-        answer = false;
+        
+        return false;
     }
     
-    return answer;
+    return true;
 }
