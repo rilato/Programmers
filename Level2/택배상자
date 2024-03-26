@@ -1,0 +1,45 @@
+#include <string>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+int solution(vector<int> order) {
+    int answer = 0;
+    int orderIdx = 0;
+    int num = 1;    // 직접 올릴 상자의 번호
+    stack <int> s;
+    
+    while (1) {
+        if (orderIdx == order.size()) {
+            break;
+        }
+        
+        // 영재가 직접 올릴 상자 == 요청한 상자
+        if (num == order[orderIdx]) {
+            num++;
+            orderIdx++;
+            answer++;
+        }
+        // 영재가 컨테이너 벨트에서 가져다 올릴 상자 == 요청한 상자
+        else if (!s.empty() && s.top() == order[orderIdx]) {
+            s.pop();
+            orderIdx++;
+            answer++;
+        }
+        // 영재가 건넬 상자 != 요청한 상자
+        else {
+            // 컨테이너 벨트에 푸시
+            if (num < order[orderIdx]) {
+                s.push(num);
+                num++;
+            }
+            // 더이상 뭘 할 수가 없음
+            else {
+                break;
+            }
+        }   
+    }
+    
+    return answer;
+}
