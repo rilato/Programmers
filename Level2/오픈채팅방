@@ -1,0 +1,81 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+vector<string> solution(vector<string> record) {
+    vector<string> answer;
+    unordered_map <string, string> m;   // id, 닉네임
+    vector <pair <string, string>> v;   // 입장, 퇴장, 변경 내역 저장
+
+    // 입장 퇴장 변경 내역을 저장
+    for (int i = 0; i < record.size(); i++) {
+        int idx = 0;
+        string temp = "";
+        
+        for (int j = 0; j < record[i].size(); j++) {
+            if (record[i][j] == ' ') {
+                idx = j + 1;
+                break;
+            }
+            
+            temp += record[i][j];
+        }
+        
+        if (temp == "Enter" || temp == "Change") {
+            string id = "";
+            string nickName = "";
+            int idx2 = 0;
+            
+            for (int j = idx; j < record[i].size(); j++) {
+                if (record[i][j] == ' ') {
+                    idx2 = j + 1;
+                    break;
+                }
+                
+                id += record[i][j];
+            }
+            
+            for (int j = idx2; j < record[i].size(); j++) {
+                nickName += record[i][j];
+            }
+            
+            m[id] = nickName;
+            
+            if (temp == "Enter") {
+                v.push_back({ "Enter", id });
+            }
+        }
+        
+        else if (temp == "Leave") {
+            string id = "";
+            
+            for (int j = idx; j < record[i].size(); j++) {
+                id += record[i][j];
+            }
+            
+            v.push_back({ "Leave", id });
+        }
+    }
+
+    // 입장 퇴장에 맞는 문장 생성
+    for (int i = 0; i < v.size(); i++) {
+        string id = v[i].second;
+        string nickName = m[id];
+        string str;
+        
+        if (v[i].first == "Enter") {
+            str = "님이 들어왔습니다.";
+            str = nickName + str;
+        }
+        else {
+            str = "님이 나갔습니다.";
+            str = nickName + str;
+        }
+        
+        answer.push_back(str);
+    }
+    
+    return answer;
+}
