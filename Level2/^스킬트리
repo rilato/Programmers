@@ -1,0 +1,42 @@
+// 처음에 문제 풀 때 스킬 트리가 잘못된 애들의 개수(count)를 세어서 리턴했다.
+// 총 개수에서 잘못된 애들의 개수를 뺀 answer를 리턴해야 한다.
+
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(string skill, vector<string> skill_trees) {
+    int answer = skill_trees.size();
+    int count = 0;  // 스킬 트리가 잘못된 애들의 개수 카운트
+    vector <int> skillTree(26); // 스킬 트리에 없는 애들은 0으로 초기화, 스킬 트리에 있는 애들은 1 2 3 순서대로 값을 넣어줌
+    
+    for (int i = 0; i < skill.size(); i++) {
+        char c = skill[i];
+        skillTree[c - 'A'] = i + 1;
+    }
+    
+    for (int i = 0; i < skill_trees.size(); i++) {
+        int order = 1;  // 스킬 트리 순서
+        
+        for (int j = 0; j < skill_trees[i].size(); j++) {
+            char c = skill_trees[i][j];
+            
+            if (skillTree[c - 'A'] != 0) {
+                if (skillTree[c - 'A'] == order) {
+                    order++;
+                }
+                // 스킬 트리 순서가 잘못된 경우
+                else {
+                    count++;
+                    break;
+                }
+            }
+        }
+    }
+    
+    answer -= count;
+    
+    return answer;
+}
