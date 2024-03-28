@@ -1,0 +1,53 @@
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int solution(vector<int> queue1, vector<int> queue2) {
+    int answer = 0;
+    long long queue1sum = 0;
+    int queue1LastIdx = queue1.size();
+    long long queue2sum = 0;
+    int queue2LastIdx = queue2.size();
+    queue <int> q1;
+    queue <int> q2;
+    
+    // 각 큐의 합을 저장
+    for (int i = 0; i < queue1.size(); i++) {
+        queue1sum += queue1[i];
+        q1.push(queue1[i]);
+        queue2sum += queue2[i];
+        q2.push(queue2[i]);
+    }
+    
+    while (1) {
+        // 체크 (합이 같으면 탈출 || 큐의 모든 애들을 확인했으면 탈출 즉,queue1LastIdx <= -1 && queue2LastIdx <= -1이면 탈출)
+        if (queue1sum == queue2sum) {
+            break;
+        }
+        if (queue1LastIdx <= -1 && queue2LastIdx <= -1) {
+            answer = -1;
+            break;
+        }
+        // 큐의 합이 더 큰 큐를 골라 큐의 front()를 다른 큐에 푸시
+        if (queue1sum > queue2sum) {
+            q2.push(q1.front());
+            queue2sum += q1.front();
+            queue1sum -= q1.front();
+            q1.pop();
+            queue1LastIdx--;
+            answer++;
+        }
+        else {
+            q1.push(q2.front());
+            queue1sum += q2.front();
+            queue2sum -= q2.front();
+            q2.pop();
+            queue2LastIdx--;
+            answer++;
+        }
+    }
+    
+    return answer;
+}
