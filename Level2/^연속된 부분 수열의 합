@@ -1,0 +1,54 @@
+// sum을 s[0]으로 초기화한다.
+// while문의 조건으로 left <= right && right < sequence.size()을 암기한다.
+// if문 내부에서 right++과 left++의 순서가 다르다!
+
+#include <string>
+#include <vector>
+#include <climits>
+#include <iostream>
+
+using namespace std;
+
+vector<int> solution(vector<int> sequence, int k) {
+    vector<int> answer;
+    int minLen = INT_MAX;
+    int sum = sequence[0];
+    int left = 0;
+    int right = 0;
+    int ansLeft = 0;
+    int ansRight = 0;
+    
+    while (left <= right && right < sequence.size()) {
+        //cout << "sum : " << sum << ", left : " << left << ", right : " << right << '\n';
+        
+        if (sum == k) {
+            if (right - left < minLen) {
+                minLen = right - left;
+                ansLeft = left;
+                ansRight = right;
+            }
+            
+            if (minLen == 0) {
+                break;
+            }
+            
+            else if (minLen != 0) {
+                right++;
+                sum += sequence[right];
+            }
+        }
+        else if (sum < k) {
+            right++;
+            sum += sequence[right];
+        }
+        else {
+            sum -= sequence[left];
+            left++;
+        }
+    }
+
+    answer.push_back(ansLeft);
+    answer.push_back(ansRight);
+    
+    return answer;
+}
