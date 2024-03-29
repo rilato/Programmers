@@ -1,0 +1,102 @@
+// n과 m의 순서가 바뀌어있으므로, nowr nowc 값 대입에 주의하자
+// 또한, 물에 잠겨 갈 수 없는 경우도 따져야 한다.
+
+// 틀린 풀이
+// 갈 수 없는 경우를 따지지 않았다.
+
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int m, int n, vector<vector<int>> puddles) {
+    int r = 1;
+    int c = 1;
+    vector <vector <long long>> dp;
+    vector <vector <bool>> puddle;
+    
+    dp.resize(n + 1, vector <long long>(m + 1));
+    puddle.resize(n + 1, vector <bool>(m + 1));
+    
+    for (int i = 0; i < puddles.size(); i++) {
+        int nowr = puddles[i][1];
+        int nowc = puddles[i][0];
+        
+        puddle[nowr][nowc] = true;
+    }
+    
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            if (puddle[i][j] == false) {
+                if (i == 1 || j == 1) {
+                    dp[i][j] = 1;
+                }
+                else {
+                    dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % 1000000007;
+                }
+            }
+            else {
+                dp[i][j] = 0;
+            }
+        }
+    }
+    
+    int answer = dp[n][m];
+    
+    return answer;
+}
+
+
+// 맞은 풀이
+
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(int m, int n, vector<vector<int>> puddles) {
+    vector <vector <long long>> dp;
+    
+    dp.resize(n + 1, vector <long long>(m + 1));
+    
+    // 전체를 -1로 초기화
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            dp[i][j] = -1;
+        }
+    }
+    
+    // 시작 지점만 1로 초기화
+    dp[1][1] = 1;
+    
+    // n과 m의 순서가 바뀌어있으므로, nowr nowc 값 대입에 주의하자
+    for (int i = 0; i < puddles.size(); i++) {
+        int nowr = puddles[i][1];
+        int nowc = puddles[i][0];
+        
+        dp[nowr][nowc] = 0;
+    }
+    
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            if (dp[i][j] == -1) {
+                if (i == 1 && j == 1) {
+                    continue;
+                }
+                
+                if (i == 1) {
+                    dp[i][j] = dp[i][j - 1] % 1000000007;
+                }
+                else if (j == 1) {
+                    dp[i][j] = dp[i - 1][j] % 1000000007;
+                }
+                else {
+                    dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % 1000000007;
+                }
+            }
+        }
+    }
+    
+    return dp[n][m];
+}
