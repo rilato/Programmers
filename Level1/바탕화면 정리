@@ -1,0 +1,38 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(vector<string> wallpaper) {
+    vector<int> answer;
+    
+    // lux(r)는 최소값
+    // luy(c)는 최소값
+    // rdx(r)는 최대값
+    // rdy(c)는 최대값
+    int lux = 51;
+    int luy = 51;
+    int rdx = 0;
+    int rdy = 0;
+    
+    // 파일 #이 있으면
+    // 왼쪽 위 (lux, luy)는 (r, c)이다
+    // 오른쪽 아래 (rdx, rdy)는 (r + 1, c + 1)이다.
+    for (int i = 0; i < wallpaper.size(); i++) {
+        for (int j = 0; j < wallpaper[i].size(); j++) {
+            if (wallpaper[i][j] == '#') {
+                lux = min(lux, i);
+                luy = min(luy, j);
+                rdx = max(rdx, i + 1);
+                rdy = max(rdy, j + 1);
+            }
+        }
+    }
+    
+    answer.push_back(lux);
+    answer.push_back(luy);
+    answer.push_back(rdx);
+    answer.push_back(rdy);
+    
+    return answer;
+}
