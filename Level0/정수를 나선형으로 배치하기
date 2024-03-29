@@ -1,0 +1,120 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<vector<int>> solution(int n) {
+    vector<vector<int>> answer;
+    
+    answer.resize(n, vector <int>(n));
+    
+    bool up = false;
+    bool down = false;
+    bool right = true;
+    bool left = false;
+    
+    int r = 0;
+    int c = 0;
+    int cnt = 0;
+    
+    while (1) {
+        if (cnt == n * n) {
+            break;
+        }
+        
+        if (up) {
+            if (r >= 0) {
+                if (answer[r][c] == 0) {
+                    answer[r][c] = cnt + 1;
+                    cnt++;
+                    
+                    if (r == 0) {
+                        up = false;
+                        right = true;
+                        c++;
+                        r++;
+                    }
+                    
+                    r--;
+                }
+                else if (answer[r][c] > 0) {
+                    up = false;
+                    right = true;
+                    c++;
+                    r++;
+                }
+            }
+        }
+        else if (down) {
+            if (r < n) {
+                if (answer[r][c] == 0) {
+                    answer[r][c] = cnt + 1;
+                    cnt++;
+                    
+                    if (r == n - 1) {
+                        down = false;
+                        left = true;
+                        c--;
+                        r--;
+                    }
+                    
+                    r++;
+                }
+                else if (answer[r][c] > 0) {
+                    down = false;
+                    left = true;
+                    c--;
+                    r--;
+                }
+            }
+        }
+        else if (right) {
+            if (c < n) {
+                if (answer[r][c] == 0) {
+                    answer[r][c] = cnt + 1;
+                    cnt++;
+                    
+                    if (c == n - 1) {
+                        right = false;
+                        down = true;
+                        c--;
+                        r++;
+                    }
+                    
+                    c++;
+                }
+                else if (answer[r][c] > 0) {
+                    right = false;
+                    down = true;
+                    c--;
+                    r++;
+                }
+            }
+        }
+        else if (left) {
+            if (c >= 0) {
+                if (answer[r][c] == 0) {
+                    answer[r][c] = cnt + 1;
+                    cnt++;
+                    
+                    if (c == 0) {
+                        left = false;
+                        up = true;
+                        c++;
+                        r--;
+                    }
+                    
+                    c--;
+                }
+                else if (answer[r][c] > 0) {
+                    left = false;
+                    up = true;
+                    c++;
+                    r--;
+                }
+            }
+        }
+    }
+    
+    return answer;
+}
