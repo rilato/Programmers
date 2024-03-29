@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<vector<int>> routes) {
+    sort(routes.begin(), routes.end());
+    
+    // 맨 앞 차량 단속용 카메라 한 개 설치
+    int answer = 1;
+    // 맨 앞 차량의 나가는 시점 저장
+    int temp = routes[0][1];
+    
+    // 그다음 차량부터 검사
+    for(int i = 1; i < routes.size(); i++){
+        // temp보다 다음 차의 들어오는 시점이 크다면 카메라를 설치
+        if(temp < routes[i][0]){
+            answer++;
+            temp = routes[i][1];    // temp를 다음 차의 나가는 시점으로 갱신
+        }
+        // 만약 다음 차가 현재 차가 나가기 전에 들어왔지만,
+        // 다음 차가 현재 차보다 빨리 나간다면 temp를 다음 차가 나가는 시점으로 갱신
+        if(routes[i][1] <= temp){
+            temp = routes[i][1];
+        }
+    }
+    
+    return answer;
+}
