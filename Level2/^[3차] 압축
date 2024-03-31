@@ -1,0 +1,61 @@
+// substr으로 문자열 자를 때, for문의 범위 조심!!
+
+#include <string>
+#include <vector>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+vector<int> solution(string msg) {
+    vector<int> answer;
+    map <string, int> m;
+    int index = 27;
+    
+    for (int i = 1; i <= 26; i++) {
+        char c = i - 1 + 'A';
+        string s = "";
+        s += c;
+        
+        m[s] = i;
+    }
+    
+    for (int i = 0; i < msg.size(); i++) {
+        int idxLen = 1;
+        bool isLast = false;    // 맨 마지막까지 체크했는지 확인
+        string temp = "";   // 바로 이전에 찾은 문자열 저장
+
+        // substr으로 길이를 조사할 때, msg.size()까지 조사한다.
+        // 왜냐하면 msg.substr(i, j)에서, 실질적으로 j - 1까지 확인하기 때문이다.
+        for (int j = idxLen; j <= msg.size(); j++) {
+            string now = msg.substr(i, j);
+
+            // 단어를 사전에서 찾았을 경우
+            if (m.find(now) != m.end()) {
+                temp = now;
+                
+                // j == msg.size() - 1이라는 것은, 문자열 끝까지 확인했다는 것
+                if (j == msg.size()) {
+                    answer.push_back(m[temp]);
+                    isLast = true;
+                    break;
+                }
+            }
+            // 단어가 사전에 없는 경우
+            else {
+                // cout << "temp : " << temp << ", now : " << now << '\n';
+                answer.push_back(m[temp]); // 압축 값 저장
+                m[now] = index;         // 사전에 값 등록
+                index++;
+                i += temp.size() - 1;   // 체크한 길이만큼 건너뛰기
+                break;
+            }
+        }
+        
+        if (isLast) {
+            break;
+        }
+    }
+    
+    return answer;
+}
