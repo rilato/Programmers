@@ -1,0 +1,103 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <iostream>
+
+using namespace std;
+
+int num = 0;
+int jinsu, cnt; // solution의 인자를 전역변수화 하기 위해 설정한 변수들
+string answer = "";
+deque <bool> dq;
+
+void change(int num);
+void check(string num);
+
+string solution(int n, int t, int m, int p) {
+    jinsu = n;
+    cnt = t;
+    
+    // 튜브의 순서만 true로 설정한다.
+    for (int i = 1; i <= m; i++) {
+        if (i == p) {
+            dq.push_back(true);
+        }
+        else {
+            dq.push_back(false);
+        }
+    }
+    
+    while (1) {
+        if (answer.size() == t) {
+            break;
+        }
+        
+        // 0부터 숫자를 하나씩 늘려가며 n진법으로 변환한다
+        //cout << "num : " << num;
+        change(num);
+        num++;
+    }
+    
+    return answer;
+}
+
+void change(int num) {
+    string temp = "";
+    
+    while (num) {
+        int now = num % jinsu;
+        
+        if (0 <= now && now <= 9) {
+            temp = to_string(now) + temp;
+        }
+        else {
+            switch (now) {
+                case 10:
+                    temp = "A" + temp;
+                    break;
+                case 11:
+                    temp = "B" + temp;
+                    break;
+                case 12:
+                    temp = "C" + temp;
+                    break;
+                case 13:
+                    temp = "D" + temp;
+                    break;
+                case 14:
+                    temp = "E" + temp;
+                    break;
+                case 15:
+                    temp = "F" + temp;
+                    break;
+            }
+        }
+        
+        num /= jinsu;
+    }
+    
+    //cout << ", jinsu : " << temp << '\n';
+    if (temp == "") {
+        temp = "0";
+    }
+    
+    check(temp);
+}
+
+void check(string num) {
+    // 덱의 front에서 한 명씩 꺼낸다.
+    // 덱 값이 true일 때, n진법의 숫자를 저장한다.
+    // 꺼낸 front는 다시 back에 넣는다. front는 삭제한다.
+    for (int i = 0; i < num.size(); i++) {
+        if (dq.front() == true) {
+            answer += num[i];
+        }
+        
+        if (answer.size() == cnt) {
+            break;
+        }
+        
+        dq.push_back(dq.front());
+        dq.pop_front();
+    }
+}
