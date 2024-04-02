@@ -1,0 +1,25 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string solution(int n) {
+    string answer = "";
+    
+    // 4진법인데 3대신 4를 저장
+    while (n) {
+        int num = n % 3;
+        
+        if (num == 0) {
+            num = 4;
+            // num == 0일 경우, n - 1을 해서 다음 자리수 계산에 문제가 없도록 설정
+            n--;
+        }
+        
+        answer = to_string(num) + answer;
+        
+        n /= 3;
+    }
+    
+    return answer;
+}
