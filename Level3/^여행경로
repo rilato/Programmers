@@ -1,0 +1,47 @@
+// 백트래킹을 이용해서 모든 경우의 수를 탐색해야 한다.
+
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <unordered_map>
+#include <queue>
+#include <iostream>
+
+using namespace std;
+
+vector<vector<string>> ticket;
+vector<string> answer;
+bool check[10001];
+bool isAnswer;
+
+void Backtracking(string start, int ticketCnt){
+    answer.push_back(start);
+    
+    if (ticketCnt == ticket.size()) {
+        isAnswer = true;
+    }
+    
+    for (int i = 0; i < ticket.size(); i++) {
+        if (check[i])
+            continue;
+        
+        if (ticket[i][0] == start) {
+            check[i] = true;
+            Backtracking(ticket[i][1], ticketCnt+1);
+            
+            if (!isAnswer) {
+                answer.pop_back();
+                check[i] = false;
+            }
+        }
+    }
+    
+}
+
+vector<string> solution(vector<vector<string>> tickets) {
+    sort(tickets.begin(), tickets.end());
+    ticket = tickets;
+    Backtracking("ICN", 0);
+    
+    return answer;
+}
