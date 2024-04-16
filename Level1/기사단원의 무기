@@ -1,0 +1,33 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(int number, int limit, int power) {
+    int answer = 0;
+    vector <int> v;
+    
+    v.resize(number + 1);
+    
+    v[1] = 1;
+    
+    for (int i = 2; i <= number; i++) {
+        v[i]++; // 모든 수의 약수인 1 계산
+        
+        for (int j = i; j <= number; j += i) {
+            v[j]++;
+        }
+    }
+    
+    for (int i = 1; i < v.size(); i++) {
+        if (v[i] > limit) {
+            answer += power;
+        }
+        else {
+            answer += v[i];
+        }
+    }
+    
+    return answer;
+}
