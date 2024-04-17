@@ -1,0 +1,86 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <climits>
+#include <cmath>
+
+using namespace std;
+
+int solution(int n, vector<vector<int>> wires) {
+    int answer = INT_MAX;
+    vector <vector <int>> v;
+    
+    v.resize(n + 1);
+    
+    for (int i = 0; i < wires.size(); i++) {
+        int n1 = wires[i][0];
+        int n2 = wires[i][1];
+        
+        v[n1].push_back(n2);
+        v[n2].push_back(n1);
+    }
+    
+    for (int i = 0; i < wires.size(); i++) {
+        int start1 = wires[i][0];
+        int start2 = wires[i][1];
+        int sum1 = 1;
+        int sum2 = 1;
+        queue <int> q1;
+        queue <int> q2;
+        vector <bool> visited1;
+        vector <bool> visited2;
+        
+        visited1.resize(n + 1);
+        visited2.resize(n + 1);
+        
+        q1.push(start1);
+        visited1[start1] = true;
+        
+        while (!q1.empty()) {
+            int now = q1.front();
+            
+            q1.pop();
+            
+            for (int j = 0; j < v[now].size(); j++) {
+                int next = v[now][j];
+                
+                if (next == start2) {
+                    continue;
+                }
+                
+                if (!visited1[next]) {
+                    visited1[next] = true;
+                    q1.push(next);
+                    sum1++;
+                }
+            }
+        }
+        
+        q2.push(start2);
+        visited2[start2] = true;
+        
+        while (!q2.empty()) {
+            int now = q2.front();
+            
+            q2.pop();
+            
+            for (int j = 0; j < v[now].size(); j++) {
+                int next = v[now][j];
+                
+                if (next == start1) {
+                    continue;
+                }
+                
+                if (!visited2[next]) {
+                    visited2[next] = true;
+                    q2.push(next);
+                    sum2++;
+                }
+            }
+        }
+        
+        answer = min(answer, abs(sum1 - sum2));
+    }
+    
+    return answer;
+}
