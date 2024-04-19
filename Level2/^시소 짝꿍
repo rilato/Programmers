@@ -1,0 +1,64 @@
+// int형을 나눗셈 시, 소수점을 버리므로, 원하는 값이 안나온다!!
+
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+long long solution(vector<int> weights) {
+    long long answer = 0;
+    unordered_map <int, int> m;
+    
+    sort(weights.begin(), weights.end());
+    
+    for (int i = 0; i < weights.size(); i++) {
+        m[weights[i]]++;
+    }
+    
+    for (int i = 0; i < weights.size() - 1; i++) {
+        if (weights[i] != weights[i + 1]) {
+            cout << "weights : " << weights[i] << '\n';
+            // 무게가 같은 사람이 있는 경우
+            if (m[weights[i]] > 1) {
+                long long n = m[weights[i]];
+                long long temp = n * (n - 1) / 2;
+                answer += temp;
+                //cout << "1 : " << answer << '\n';
+            }
+            // 2배인 사람이 있는 경우
+            if (m[2 * weights[i]] > 0) {
+                long long n1 = m[weights[i]];
+                long long n2 = m[2 * weights[i]];
+                answer += n1 * n2;
+                //cout << "2 : " << answer << '\n';
+            }
+            // 3/2배인 사람이 있는 경우 (홀수인 경우, 나누기 2하고 곱하기 3하면 원하는 숫자가 안나올 수 있으므로, 조건에서 weights[i] % 2 == 0을 통해 확인해준다!)
+            if (weights[i] % 2 == 0 && m[weights[i] / 2 * 3] > 0) {
+                long long n1 = m[weights[i]];
+                long long n2 = m[weights[i] / 2 * 3];
+                answer += n1 * n2;
+                //cout << "3 : " << answer << '\n';
+            }
+            // 4/3배인 사람이 있는 경우 (3으로 나누어 떨어지지 않는 경우, 나누기 3하고 곱하기 4하면 원하는 숫자가 안나올 수 있으므로, 조건에서 weights[i] % 3 == 0을 통해 확인해준다!)
+            if (weights[i] % 3 == 0 && m[weights[i] / 3 * 4] > 0) {
+                long long n1 = m[weights[i]];
+                long long n2 = m[weights[i] / 3 * 4];
+                answer += n1 * n2;
+                //cout << "4 : " << answer << '\n';
+            }
+        }
+    }
+    
+    // 맨 마지막에 무게가 같은 사람이 있는 경우
+    if (m[weights[weights.size() - 1]] > 1) {
+        long long n = m[weights[weights.size() - 1]];
+        long long temp = n * (n - 1) / 2;
+        answer += temp;
+    }
+    //cout << "last : " << answer << '\n';
+    
+    return answer;
+}
