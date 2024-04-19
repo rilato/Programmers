@@ -1,0 +1,209 @@
+// 각 문자열 내부의 문자들 자체를 미리 정렬하여, 시간 초과를 방지한다.
+
+// 시간 초과가 난 풀이
+
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+string all = "";
+bool used[26];
+vector <string> v;
+vector <char> temp;
+vector <string> answer;
+
+void Backtracking(int depth, int idx, int M, vector <bool> visited, int &maximum, map <string, int> &m1);
+
+vector<string> solution(vector<string> orders, vector<int> course) {
+    v = orders;
+    
+    for (int i = 0; i < v.size(); i++) {
+        for (int j = 0; j < v[i].size(); j++) {
+            used[v[i][j] - 'A'] = true;
+        }
+    }
+    
+    // all에 알파벳을 ABC순에 맞게 저장하기
+    for (int i = 0; i < 26; i++) {
+        if (used[i]) {
+            all += i + 'A';
+        }
+    }
+    
+    //cout << "all : " << all << '\n';
+    
+    for (int i = 0; i < course.size(); i++) {
+        int maximum = 0;
+        vector <bool> visited(all.size());
+        map <string, int> m1;
+        
+        Backtracking(0, 0, course[i], visited, maximum, m1);
+        
+        for (auto iter = m1.begin(); iter != m1.end(); iter++) {
+            if (iter->second == maximum) {
+                answer.push_back(iter->first);
+            }
+        }
+    }
+    
+    sort(answer.begin(), answer.end());
+    
+    return answer;
+}
+
+void Backtracking(int depth, int idx, int M, vector <bool> visited, int &maximum, map <string, int> &m1) {
+    if (depth == M) {
+        string now = "";
+        int count = 0;
+        // map을 사용하여 시간 초과 발생!
+        map <char, int> m2;
+        
+        for (int i = 0; i < temp.size(); i++) {
+            now += temp[i];
+            m2[temp[i]]++;
+        }
+        
+        //cout << "now : " << now << '\n';
+        
+        for (int i = 0; i < v.size(); i++) {
+            int cnt = 0;
+            
+            for (int j = 0; j < v[i].size(); j++) {
+                // find하는 데에 시간이 많이 든다!
+                // 따라서, 문자열을 정렬해놓고 순차적으로 탐색하는 다른 방식을 사용한다!!
+                if (m2.find(v[i][j]) != m2.end()) {
+                    cnt++;
+                }
+            }
+            
+            if (cnt == M) {
+                count++;
+            }
+        }
+        
+        if (count > 1) {
+            maximum = max(maximum, count);
+            m1[now] = count;
+        }
+        
+        return;
+    }
+    
+    for (int i = idx; i < all.size(); i++) {
+        if (!visited[i]) {
+            visited[i] = true;
+            temp.push_back(all[i]);
+            Backtracking(depth + 1, i + 1, M, visited, maximum, m1);
+            temp.pop_back();
+            visited[i] = false;
+        }
+    }
+}
+
+// 맞은 풀이
+
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+string all = "";
+bool used[26];
+vector <string> v;
+vector <char> temp;
+vector <string> answer;
+
+void Backtracking(int depth, int idx, int M, vector <bool> visited, int &maximum, map <string, int> &m1);
+
+vector<string> solution(vector<string> orders, vector<int> course) {
+    v = orders;
+    
+    for (int i = 0; i < v.size(); i++) {
+        // 각 문자열 내부의 문자들 자체를 미리 정렬해버리기
+        sort (v[i].begin(), v[i].end());
+        
+        for (int j = 0; j < v[i].size(); j++) {
+            used[v[i][j] - 'A'] = true;
+        }
+    }
+    
+    // all에 알파벳을 ABC순에 맞게 저장하기
+    for (int i = 0; i < 26; i++) {
+        if (used[i]) {
+            all += i + 'A';
+        }
+    }
+    
+    //cout << "all : " << all << '\n';
+    
+    for (int i = 0; i < course.size(); i++) {
+        int maximum = 0;
+        vector <bool> visited(all.size());
+        map <string, int> m1;
+        
+        Backtracking(0, 0, course[i], visited, maximum, m1);
+        
+        for (auto iter = m1.begin(); iter != m1.end(); iter++) {
+            if (iter->second == maximum) {
+                answer.push_back(iter->first);
+            }
+        }
+    }
+    
+    sort(answer.begin(), answer.end());
+    
+    return answer;
+}
+
+void Backtracking(int depth, int idx, int M, vector <bool> visited, int &maximum, map <string, int> &m1) {
+    if (depth == M) {
+        string now = "";
+        int count = 0;
+        
+        for (int i = 0; i < temp.size(); i++) {
+            now += temp[i];
+        }
+        
+        //cout << "now : " << now << '\n';
+        
+        for (int i = 0; i < v.size(); i++) {
+            int cnt = 0;
+            int k = 0;
+            
+            for (int j = 0; j < v[i].size(); j++) {
+                if (v[i][j] == temp[k]) {
+                    cnt++;
+                    k++;
+                }
+            }
+            
+            if (cnt == M) {
+                count++;
+            }
+        }
+        
+        if (count > 1) {
+            maximum = max(maximum, count);
+            m1[now] = count;
+        }
+        
+        return;
+    }
+    
+    for (int i = idx; i < all.size(); i++) {
+        if (!visited[i]) {
+            visited[i] = true;
+            temp.push_back(all[i]);
+            Backtracking(depth + 1, i + 1, M, visited, maximum, m1);
+            temp.pop_back();
+            visited[i] = false;
+        }
+    }
+}
