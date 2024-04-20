@@ -1,0 +1,192 @@
+// 조건 주의 사항
+// 노래가 없는 경우 (None) 출력!
+// 알맞은 노래가 여러개면 정렬 조건 1) 재생 길이가 긴 것 2) 먼저 입력된 제목!
+
+// 반례 관련
+// 시간만큼 음악 재생하여 코드 생성할 때, #이 붙은 애들을 신경써서 처리할 것!
+// "DF", ["06:20,06:50,TEST,DDF"] -> "TEST" (연속으로 같은 코드가 나오는 경우를 처리한다.)
+
+// 틀린 풀이
+
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool cmp (pair <pair <string, int>, int> &a, pair <pair <string, int>, int> &b);
+
+string solution(string m, vector<string> musicinfos) {
+    string answer = "(None)";
+    vector <pair <pair <string, int>, int>> v;
+    
+    for (int i = 0; i < musicinfos.size(); i++) {
+        int start = stoi(musicinfos[i].substr(0, 2)) * 60 + stoi(musicinfos[i].substr(3, 2));
+        int end = stoi(musicinfos[i].substr(6, 2)) * 60 + stoi(musicinfos[i].substr(9, 2));
+        int time = end - start;
+        int idx;
+        string song = "";
+        string code = "";
+        
+        // time의 길이가 m보다 작으면, 코드를 생성할 수 없으므로 건너뛰기
+        if (time < m.size()) {
+            continue;
+        }
+            
+        for (int j = 12; j < musicinfos[i].size(); j++) {
+            if (musicinfos[i][j] == ',') {
+                idx = j + 1;
+                break;
+            }
+            
+            song += musicinfos[i][j];
+        }
+        
+        int startIdx = idx;
+        
+        // 시간만큼 음악 재생하여 코드 생성
+        while (time--) {
+            if (idx == musicinfos[i].size()) {
+                idx = startIdx;
+            }
+            
+            code += musicinfos[i][idx];
+            idx++;
+        }
+        
+        int k = 0;
+        
+        for (int j = 0; j < code.size(); j++) {
+            if (code[j] != m[k]) {
+                k = 0;
+                continue;
+            }
+            if (code[j] == m[k]) {
+                k++;
+            }
+            if (k == m.size()) {
+                // C#같이 마지막 문자 뒤에 #이 오는 경우를 처리한다.
+                if (j + 1 < code.size() && code[j + 1] == '#') {
+                    k = 0;
+                }
+                else {
+                    v.push_back({{song, end - start}, i});
+                    break;
+                }
+            }
+        }
+    }
+    
+    if (v.size() > 0) {
+        sort(v.begin(), v.end(), cmp);
+        answer = v[0].first.first;
+    }
+    
+    return answer;
+}
+
+bool cmp (pair <pair <string, int>, int> &a, pair <pair <string, int>, int> &b) {
+    if (a.first.second == b.first.second) {
+        return a.second < b.second;
+    }
+    
+    return a.first.second > b.first.second;
+}
+
+// 맞은 풀이
+
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+bool cmp (pair <pair <string, int>, int> &a, pair <pair <string, int>, int> &b);
+
+string solution(string m, vector<string> musicinfos) {
+    string answer = "(None)";
+    vector <pair <pair <string, int>, int>> v;
+    
+    for (int i = 0; i < musicinfos.size(); i++) {
+        int start = stoi(musicinfos[i].substr(0, 2)) * 60 + stoi(musicinfos[i].substr(3, 2));
+        int end = stoi(musicinfos[i].substr(6, 2)) * 60 + stoi(musicinfos[i].substr(9, 2));
+        int time = end - start;
+        int idx;
+        string song = "";
+        string code = "";
+            
+        for (int j = 12; j < musicinfos[i].size(); j++) {
+            if (musicinfos[i][j] == ',') {
+                idx = j + 1;
+                break;
+            }
+            
+            song += musicinfos[i][j];
+        }
+        
+        int startIdx = idx;
+        
+        // 시간만큼 음악 재생하여 코드 생성
+        while (time--) {
+            if (idx == musicinfos[i].size()) {
+                idx = startIdx;
+            }
+            
+            code += musicinfos[i][idx];
+            idx++;
+            
+            // #인 경우에는 time과 상관없이 그냥 붙여주기
+            if (musicinfos[i][idx] == '#') {
+                code += musicinfos[i][idx];
+                idx++;
+            }
+        }
+        
+        int k = 0;
+        
+        //cout << "code : " << code << "\n";
+        
+        for (int j = 0; j < code.size(); j++) {
+            if (code[j] != m[k]) {
+                k = 0;
+                
+                // "DF", ["06:20,06:50,TEST,DDF"] -> "TEST"
+                // 위와 같은 케이스에서, DD가 연속으로 나오는 경우를 처리하기 위한 코드
+                if (code[j] == m[k]) {
+                    k++;
+                }
+                
+                continue;
+            }
+            if (code[j] == m[k]) {
+                k++;
+            }
+            if (k == m.size()) {
+                // C#같이 마지막 문자 뒤에 #이 오는 경우를 처리한다.
+                if (j + 1 < code.size() && code[j + 1] == '#') {
+                    k = 0;
+                }
+                else {
+                    v.push_back({{song, end - start}, i});
+                    break;
+                }
+            }
+        }
+    }
+    
+    if (v.size() > 0) {
+        sort(v.begin(), v.end(), cmp);
+        answer = v[0].first.first;
+    }
+    
+    return answer;
+}
+
+bool cmp (pair <pair <string, int>, int> &a, pair <pair <string, int>, int> &b) {
+    if (a.first.second == b.first.second) {
+        return a.second < b.second;
+    }
+    
+    return a.first.second > b.first.second;
+}
