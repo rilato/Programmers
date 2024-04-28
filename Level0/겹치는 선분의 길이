@@ -1,0 +1,28 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<vector<int>> lines) {
+    int answer = 0;
+    vector <int> v(201);
+    
+    for (int i = 0; i < lines.size(); i++) {
+        int s = lines[i][0] + 100;
+        int e = lines[i][1] + 100;
+        
+        for (int j = s + 1; j <= e; j++) {
+            v[j]++;
+        }
+    }
+    
+    for (int i = 0; i < v.size(); i++) {
+        if (v[i] >= 2) {
+            //cout << "i : " << i << ", v[i] : " << v[i] << '\n';
+            answer++;
+        }
+    }
+    
+    return answer;
+}
