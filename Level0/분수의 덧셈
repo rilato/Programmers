@@ -1,0 +1,30 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int GCD (int a, int b);
+
+vector<int> solution(int numer1, int denom1, int numer2, int denom2) {
+    vector<int> answer;
+    
+    int denom = denom1 * denom2;
+    int numer = numer1 * denom2 + numer2 * denom1;
+    
+    int gcd = GCD(denom, numer);
+    
+    answer.push_back(numer / gcd);
+    answer.push_back(denom / gcd);
+    
+    return answer;
+}
+
+int GCD (int a, int b) {
+    while (b) {
+        int c = a % b;
+        a = b;
+        b = c;
+    }
+    
+    return a;
+}
